@@ -21,7 +21,7 @@ def give_freq_counts(filename, separator, user_input):
 
 
 def give_tag_info(pos_tag_elem):
-    with open('POSTagList.txt') as f:
+    with open('POSTagList.txt', encoding="utf8") as f:
         content = f.readlines()
         tag_num = -1
         if int == type(pos_tag_elem):
@@ -42,15 +42,11 @@ def get_input_file(filename, separator):
             for row in csv.reader(get_input, delimiter=separator, skipinitialspace=True):
                 if row:
                     input_word = row[1]
-                    print(input_word)
                     freq = give_freq_counts(r'Training_Berp.txt', '\t', input_word)
                     max_freq = max(freq)
                     if len(input_word) != 0:
-                        print(freq)
                         pos_tag_num = freq.index(max_freq)
-                        print(max_freq)
                         pos_tag = give_tag_info(pos_tag_num)
-                        print(pos_tag)
                         writer.writerow(row + [pos_tag.strip()])
                     else:
                         writer.writerow('\n'.strip())
