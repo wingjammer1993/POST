@@ -22,6 +22,16 @@ def give_freq_counts(filename, separator, column):
     return sorted_freq
 
 
+def give_vocabulary(filename, separator='\t', column=1):
+    input_text = []
+    with open(filename, 'r') as file_obj:
+        for line in csv.reader(file_obj, delimiter=separator, skipinitialspace=True):
+            if line:
+                input_word = line[column]
+                input_text.append(input_word)
+
+    input_vocabulary = set(input_text)
+    return input_vocabulary
 
 '''
 if __name__ == "__main__":
