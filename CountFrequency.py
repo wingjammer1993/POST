@@ -6,6 +6,7 @@ import nltk
 def give_freq_counts(filename, separator, column):
     input_text = []
     frequency = {}
+
     with open(filename, 'r') as file_obj:
         for line in csv.reader(file_obj, delimiter=separator, skipinitialspace=True):
             if line:
@@ -16,7 +17,8 @@ def give_freq_counts(filename, separator, column):
     freq_dist = nltk.FreqDist(input_text)
     for word in input_vocab:
         frequency[word] = freq_dist[word]
-    sorted_freq = sorted(frequency.items(), key=operator.itemgetter(1), reverse=True)
+
+    sorted_freq = dict(sorted(frequency.items(), key=operator.itemgetter(1), reverse=True))
     return sorted_freq
 
 
