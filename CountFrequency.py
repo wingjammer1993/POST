@@ -1,4 +1,3 @@
-import re
 import operator
 import csv
 
@@ -19,7 +18,8 @@ def give_freq_counts(filename, separator, column):
     print(sorted_x)
     return sorted_x
 
-
+'''
 if __name__ == "__main__":
     output_file = give_freq_counts(r'Training_Berp.txt', '\t', 1)
     print("success")
+'''
