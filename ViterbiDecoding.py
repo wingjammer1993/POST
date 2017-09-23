@@ -56,7 +56,12 @@ def viterbi_decode(observation_sequence, state_sequence, a, b, pie_1, pie_2):
         use_index = int(best_path[col+1])
         best_path[col] = backtrace[use_index][col+1]
 
-    return best_path
+    answer_string = []
+    for index in range(0, len(observation_sequence), 1):
+        tag = best_path[int(index)]
+        answer_string.append(ss[int(tag)])
+
+    return answer_string
 
 
 if __name__ == "__main__":
@@ -86,11 +91,6 @@ if __name__ == "__main__":
            [0, 0, 0.010446, 0, 0],
            [0, 0, 0, 0.506099, 0]]
 
-    backtrace_list = viterbi_decode(os, ss, a_1, b_1, pie_1, pie_2)
-    answer_string = []
-    for index in range(0, len(os), 1):
-        tag = backtrace_list[int(index)]
-        answer_string.append(ss[int(tag)])
-
-    print(answer_string)
+    answer = viterbi_decode(os, ss, a_1, b_1, pie_1, pie_2)
+    print(answer)
 
