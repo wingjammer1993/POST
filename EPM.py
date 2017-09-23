@@ -45,12 +45,14 @@ def get_tag_bigram_probability(filename_tag,filename_vocab, bigram_list, unigram
 def get_emission_probability_matrix():
     sentence_sequence_word_list = TPM.construct_sentence_sequence(r'Training_Berp.txt', '\t', 1, 0)
     sentence_sequence_tag_list = TPM.construct_sentence_sequence(r'Training_Berp.txt', '\t', 2, 0)
-    word_tag_pairs = get_epm_bigrams(sentence_sequence_tag_list,sentence_sequence_word_list)
+    word_tag_pairs = get_epm_bigrams(sentence_sequence_tag_list, sentence_sequence_word_list)
     tag_frequency_count = CountFrequency.give_freq_counts(r'Training_Berp.txt', '\t', 2)
     wtag_bigram_count_dictionary = get_tag_bigram_probability(r'POSTagList.txt', r'Training_Berp.txt', word_tag_pairs, tag_frequency_count)
     TPM.create_csv(wtag_bigram_count_dictionary, 'EPM_out.csv')
     print(wtag_bigram_count_dictionary)
     print('success')
+    return wtag_bigram_count_dictionary
+
 
 
 if __name__ == "__main__":
