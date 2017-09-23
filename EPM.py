@@ -1,7 +1,7 @@
-import csv
 import nltk
 import CountFrequency
 import TPM
+
 
 # This method is generating bigram tuples from the parsed file, using nltk
 
@@ -17,7 +17,7 @@ def get_epm_bigrams(sequence_1,sequence_2):
 # dictionaries are ordered according to tag list
 
 def get_tag_bigram_probability(filename_tag,filename_vocab, bigram_list, unigram_count):
-    word_tag_dictionary_list = []
+    word_tag_dictionary_list = {}
 
     with open(filename_tag, encoding="utf8") as file_obj:
         content = file_obj.readlines()
@@ -32,10 +32,10 @@ def get_tag_bigram_probability(filename_tag,filename_vocab, bigram_list, unigram
                     if word_name_column:
                         tag_bigram_count = freq_dist[word_name_column.strip()]
                         if unigram_tag_count:
-                            word_tag_dictionary[word_name_column.strip()] = tag_bigram_count#/unigram_tag_count
+                            word_tag_dictionary[word_name_column.strip()] = tag_bigram_count/unigram_tag_count
                         else:
                             word_tag_dictionary[word_name_column.strip()] = 0
-                word_tag_dictionary_list.append(word_tag_dictionary)
+                word_tag_dictionary_list[tag_name_row.strip()] = word_tag_dictionary
 
     return word_tag_dictionary_list
 
@@ -48,11 +48,10 @@ def get_emission_probability_matrix():
     word_tag_pairs = get_epm_bigrams(sentence_sequence_tag_list, sentence_sequence_word_list)
     tag_frequency_count = CountFrequency.give_freq_counts(r'Training_Berp.txt', '\t', 2)
     wtag_bigram_count_dictionary = get_tag_bigram_probability(r'POSTagList.txt', r'Training_Berp.txt', word_tag_pairs, tag_frequency_count)
-    TPM.create_csv(wtag_bigram_count_dictionary, 'EPM_out.csv')
+#   TPM.create_csv(wtag_bigram_count_dictionary, 'EPM_out.csv')
     print(wtag_bigram_count_dictionary)
     print('success')
     return wtag_bigram_count_dictionary
-
 
 
 if __name__ == "__main__":
