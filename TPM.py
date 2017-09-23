@@ -75,6 +75,7 @@ def get_transition_probability_matrix():
     create_csv(tag_bigram_count_dictionary, 'TPM_out.csv')
     print(tag_bigram_count_dictionary)
     print('success')
+    return tag_bigram_count_dictionary
 
 
 if __name__ == "__main__":
