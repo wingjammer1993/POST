@@ -39,6 +39,7 @@ def viterbi_decode(observation_sequence, state_sequence, a, b, pie_1, pie_2):
                 backtrace[s][t] = numpy.argmax(func_max)
 
     # Termination - we will fill the remaining columns in the state chart
+
     end_col = len(observation_sequence) - 1
     func_max = []
     for s_iter, state_i in enumerate(state_sequence):
