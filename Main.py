@@ -4,16 +4,15 @@ import ViterbiDecoding
 import LocalParamters
 import CountFrequency
 import Input_Generation
+import csv
 
 
-def fetch_output():
+def fetch_output(dev_set):
 
     # Defines
 
     tags_file = r'POSTagList.txt'
     training_file = r'Training_Berp.txt'
-    dev_set = r'NEW_EVAL_TASK.txt'
-    output_file = 'output.txt'
     delimiter = '\t'
     word_column = 1
     tag_column = 2
@@ -70,8 +69,29 @@ def fetch_output():
         answer_string = ViterbiDecoding.viterbi_decode(observation_sequence, state_sequence, a, b, pie_1, pie_2)
 
         # fetch the answer strings
-        answers.append(answer_string)
+        answers.extend(answer_string)
+        answers.extend(" ")
+
+    return answers
+
+
+def print_output(dev_set, answers, outfile, separator):
+    with open(outfile, "r+", newline='') as output:
+        with open(dev_set, "r") as get_input:
+            writer = csv.writer(output, delimiter=separator, skipinitialspace=True)
+            for index, row in enumerate(csv.reader(get_input, delimiter=separator, skipinitialspace=True)):
+                if row:
+                    writer.writerow(row + [answers[index].strip()])
+                else:
+                    writer.writerow('\n'.strip())
+
+    return output
 
 
 if __name__ == "__main__":
-    fetch_output()
+
+    devset = r'NEW_EVAL_TASK.txt'
+    out_file = 'output_hmm.txt'
+    delim = '\t'
+    answer_list = fetch_output(devset)
+    print_output(devset, answer_list, out_file, delim)

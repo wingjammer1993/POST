@@ -16,6 +16,7 @@ def construct_sentence_sequence(filename, separator, column, row):
             else:
                 sentence.append('<e>')
                 sentence.append('<s>')
+        sentence.append('<e>')
     return sentence
 
 
