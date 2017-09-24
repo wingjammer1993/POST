@@ -1,7 +1,5 @@
 import csv
 import nltk
-import CountFrequency
-
 
 # This method is parsing the column of given filename file and constructing a sentence with start
 # and end markers. The complete file is parsed.
@@ -57,7 +55,7 @@ def get_tag_bigram_probability(filename, bigram_list, unigram_count):
     return tag_dictionary_list
 
 
-def get_initial_pi_matrix(filename, bigram_list, unigram_count):
+def initial_pi_matrix(filename, bigram_list, unigram_count):
     tag_successors = [b for (a, b) in bigram_list if a == '<s>']
     freq_dist = nltk.FreqDist(tag_successors)
     unigram_tag_count = unigram_count.count('<s>')
@@ -73,7 +71,7 @@ def get_initial_pi_matrix(filename, bigram_list, unigram_count):
     return tag_tag_dictionary
 
 
-def get_end_pi_matrix(filename, bigram_list, unigram_count):
+def end_pi_matrix(filename, bigram_list, unigram_count):
     tag_dictionary_list = {}
     with open(filename, encoding="utf8") as file_obj:
         content = file_obj.readlines()
@@ -92,32 +90,18 @@ def get_end_pi_matrix(filename, bigram_list, unigram_count):
     return tag_dictionary_list
 
 
-# This method creates a csv of the TPM matrix
-
-# def create_csv(data_list, output_filename):
-#    keys = data_list.keys()
-#    with open(output_filename, 'w') as output_file:
-#        dict_writer = csv.DictWriter(output_file, keys, delimiter='\t')
-#        dict_writer.writerows(data_list.keys())
+def get_initial_pi_matrix(tags_file, tag_tag_pairs, sentence_sequence_word_list):
+    initial_pi_matrix_item = initial_pi_matrix(tags_file, tag_tag_pairs, sentence_sequence_word_list)
+    return initial_pi_matrix_item
 
 
-# This method calls all other methods
+def get_end_pi_matrix(tags_file, tag_tag_pairs, tag_frequency_count):
+    end_pi_matrix_item = end_pi_matrix(tags_file, tag_tag_pairs, tag_frequency_count)
+    return end_pi_matrix_item
 
-def get_transition_probability_matrix():
-    sentence_sequence_list = construct_sentence_sequence(r'Training_Berp.txt', '\t', 2, 0)
-    tag_tag_pairs = get_bigrams(sentence_sequence_list)
-    tag_frequency_count = CountFrequency.give_freq_counts(r'Training_Berp.txt', '\t', 2)
-    tag_bigram_count_dictionary = get_tag_bigram_probability(r'POSTagList.txt', tag_tag_pairs, tag_frequency_count)
-#    create_csv(tag_bigram_count_dictionary, 'TPM_out.csv')
-#    sentence_sequence_word_list = construct_sentence_sequence(r'Training_Berp.txt', '\t', 1, 0)
-#    initial_pi_matrix = get_initial_pi_matrix(r'POSTagList.txt', tag_tag_pairs, sentence_sequence_word_list)
-#    end_pi_matrix = get_end_pi_matrix(r'POSTagList.txt', tag_tag_pairs, tag_frequency_count)
-#    print(initial_pi_matrix)
-#    print(end_pi_matrix)
-    print(tag_bigram_count_dictionary)
-    print('success')
+
+def get_transition_probability_matrix(tags_file, tag_tag_pairs, tag_frequency_count):
+    tag_bigram_count_dictionary = get_tag_bigram_probability(tags_file, tag_tag_pairs, tag_frequency_count)
     return tag_bigram_count_dictionary
 
 
-if __name__ == "__main__":
-    get_transition_probability_matrix()

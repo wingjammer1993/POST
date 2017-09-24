@@ -33,8 +33,3 @@ def give_vocabulary(filename, separator='\t', column=1):
     input_vocabulary = set(input_text)
     return input_vocabulary
 
-'''
-if __name__ == "__main__":
-    output_file = give_freq_counts(r'Training_Berp.txt', '\t', 2)
-    print(output_file)
-'''

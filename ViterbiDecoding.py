@@ -44,8 +44,8 @@ def viterbi_decode(observation_sequence, state_sequence, a, b, pie_1, pie_2):
     func_max = []
     for s_iter, state_i in enumerate(state_sequence):
         v1 = viterbi[s_iter][end_col]
-        v2 = a[s_iter][s]
-        func_max.append(viterbi[s_iter][end_col] * a[s_iter][s])
+        v2 = pie_2[s_iter]
+        func_max.append(viterbi[s_iter][end_col] * pie_2[s_iter])
 
     best_score = numpy.amax(func_max)
     start_backtrace = numpy.argmax(func_max)
@@ -60,7 +60,7 @@ def viterbi_decode(observation_sequence, state_sequence, a, b, pie_1, pie_2):
     answer_string = []
     for index in range(0, len(observation_sequence), 1):
         tag = best_path[int(index)]
-        answer_string.append(ss[int(tag)])
+        answer_string.append(state_sequence[int(tag)])
 
     return answer_string
 
