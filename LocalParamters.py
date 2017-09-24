@@ -1,5 +1,4 @@
 import numpy
-import Baseline
 
 
 def construct_local_transition(state_sequence, master_a):
@@ -9,7 +8,6 @@ def construct_local_transition(state_sequence, master_a):
             required_row = master_a[tag_row]
             tag_tag_probability = required_row[tag_column]
             a[row][column] = tag_tag_probability
-    print(a)
     return a
 
 
@@ -23,7 +21,6 @@ def construct_local_emission(state_sequence, observation_sequence, vocabulary, m
                 b[row][column] = word_tag_probability
             else:
                 b[row][column] = 0
-    print(b)
     return b
 
 
