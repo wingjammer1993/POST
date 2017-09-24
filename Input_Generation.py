@@ -1,5 +1,23 @@
 
 
+def define_training_unk_words(word_frequency_count, sentence_sequence_word_list):
+    sliced_dictionary = {k: v for k, v in word_frequency_count.items() if v <= 3}
+    for index, word in enumerate(sentence_sequence_word_list):
+        if word:
+            if word in sliced_dictionary:
+                sentence_sequence_word_list[index] = 'unk'
+    return sentence_sequence_word_list
+
+
+def define_extracted_unk_words(vocabulary_list, extracted_input_list):
+    vocabulary = set(vocabulary_list)
+    for sublist in extracted_input_list:
+        for index, word in enumerate(sublist):
+            if word not in vocabulary:
+                sublist[index] = 'unk'
+    return extracted_input_list
+
+
 def extract_input_sentences_list(all_inputs):
     extracted_input = []
     observation_sequence = []

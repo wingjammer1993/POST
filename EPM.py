@@ -16,7 +16,7 @@ def get_epm_bigrams(sequence_1, sequence_2):
 # It returns a list of dictionaries, each dictionary corresponds to a column of emission probability matrix
 # dictionaries are ordered according to tag list
 
-def get_tag_bigram_probability(filename_tag, filename_vocab, bigram_list, unigram_count):
+def get_tag_bigram_probability(filename_tag, vocabulary, bigram_list, unigram_count):
     word_tag_dictionary_list = {}
 
     with open(filename_tag, encoding="utf8") as file_obj:
@@ -27,7 +27,6 @@ def get_tag_bigram_probability(filename_tag, filename_vocab, bigram_list, unigra
                 freq_dist = nltk.FreqDist(tag_successors)
                 unigram_tag_count = unigram_count.get(tag_name_row.strip())
                 word_tag_dictionary = {}
-                vocabulary = CountFrequency.give_vocabulary(filename_vocab)
                 for word_name_column in vocabulary:
                     if word_name_column:
                         tag_bigram_count = freq_dist[word_name_column.strip()]
@@ -42,6 +41,6 @@ def get_tag_bigram_probability(filename_tag, filename_vocab, bigram_list, unigra
 
 # This method calls all other methods
 
-def get_emission_probability_matrix(tags_file, training_file, word_tag_pairs, tag_frequency_count):
-    wtag_bigram_count_dictionary = get_tag_bigram_probability(tags_file, training_file, word_tag_pairs, tag_frequency_count)
+def get_emission_probability_matrix(tags_file, vocabulary, word_tag_pairs, tag_frequency_count):
+    wtag_bigram_count_dictionary = get_tag_bigram_probability(tags_file, vocabulary, word_tag_pairs, tag_frequency_count)
     return wtag_bigram_count_dictionary

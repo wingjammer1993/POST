@@ -13,7 +13,7 @@ def construct_local_transition(state_sequence, master_a):
     return a
 
 
-def construct_local_emission(state_sequence, observation_sequence,vocabulary, master_b):
+def construct_local_emission(state_sequence, observation_sequence, vocabulary, master_b):
     b = numpy.zeros((len(state_sequence), len(observation_sequence)))
     for row, tag_row in enumerate(state_sequence):
         for column, tag_column in enumerate(observation_sequence):

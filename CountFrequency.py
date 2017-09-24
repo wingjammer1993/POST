@@ -33,3 +33,4 @@ def give_vocabulary(filename, separator='\t', column=1):
     input_vocabulary = set(input_text)
     return input_vocabulary
 
+
