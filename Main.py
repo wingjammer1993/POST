@@ -6,7 +6,8 @@ import CountFrequency
 import Input_Generation
 import csv
 import Smoothing
-
+import sys
+import Baseline
 
 def fetch_output(training_file,dev_set):
 
@@ -93,9 +94,11 @@ def print_output(dev_set, answers, outfile, separator):
 
 if __name__ == "__main__":
 
-    devset = r'NEW_EVAL_TASK.txt'
-    training = r'Training_Berp.txt'
-    out_file = 'output_hmm.txt'
+    training = sys.argv[1]  # r'Training_Berp.txt'
+    devset = sys.argv[2]  # r'full_test.txt'
+    out_file = sys.argv[3]  # 'output_hmm.txt'
     delim = '\t'
+
+    Baseline.print_baseline_output(training, devset, delim)
     answer_list = fetch_output(training,devset)
     print_output(devset, answer_list, out_file, delim)

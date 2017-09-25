@@ -42,12 +42,5 @@ def print_baseline_output(training, filename, separator):
                         writer.writerow('\n'.strip())
                 else:
                     writer.writerow('\n'.strip())
-    return output
 
 
-if __name__ == "__main__":
-    training_file = r'Training_Berp.txt'
-    devset = r'NEW_EVAL_TASK.txt'
-    delim = '\t'
-    output_file = print_baseline_output(training_file, devset, delim)
-    print("success")
