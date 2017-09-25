@@ -5,14 +5,14 @@ import LocalParamters
 import CountFrequency
 import Input_Generation
 import csv
+import Smoothing
 
 
-def fetch_output(dev_set):
+def fetch_output(training_file,dev_set):
 
     # Defines
 
     tags_file = r'POSTagList.txt'
-    training_file = r'Training_Berp.txt'
     delimiter = '\t'
     word_column = 1
     tag_column = 2
@@ -31,6 +31,7 @@ def fetch_output(dev_set):
     word_tag_pairs = EPM.get_epm_bigrams(sentence_sequence_tag_list, unked_sequence_word_list)
     tag_tag_pairs = TPM.get_bigrams(sentence_sequence_tag_list)
     vocabulary = set(unked_sequence_word_list)
+
     # Creating the master parameter list
 
     master_a = TPM.get_transition_probability_matrix(tags_file, tag_tag_pairs, tag_frequency_count)
@@ -38,6 +39,8 @@ def fetch_output(dev_set):
     master_pie_1 = TPM.get_initial_pi_matrix(tags_file, tag_tag_pairs, sentence_sequence_word_list)
     master_pie_2 = TPM.get_end_pi_matrix(tags_file, tag_tag_pairs, tag_frequency_count)
 
+    # Apply smoothing to Transition probability matrix
+    # master_a = Smoothing.get_add_k_smoothed_tpm(tags_file, tag_tag_pairs, tag_frequency_count)
     # Generating the list of sentences to be fed
 
     all_inputs = TPM.construct_sentence_sequence(dev_set, delimiter, 1, 0)
@@ -91,7 +94,8 @@ def print_output(dev_set, answers, outfile, separator):
 if __name__ == "__main__":
 
     devset = r'NEW_EVAL_TASK.txt'
+    training = r'Training_Berp.txt'
     out_file = 'output_hmm.txt'
     delim = '\t'
-    answer_list = fetch_output(devset)
+    answer_list = fetch_output(training,devset)
     print_output(devset, answer_list, out_file, delim)

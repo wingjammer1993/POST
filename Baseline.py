@@ -1,53 +1,43 @@
 import csv
 
+
 # This function will return the array of all tags with frequency count for user_input string
 
-
-def give_freq_counts(filename, separator, user_input):
-    tag_set = [0] * 45
+def train_freq_counts(filename, separator):
+    freq_dict = {}
     with open(filename, 'r') as file_obj:
         for line in csv.reader(file_obj, delimiter=separator, skipinitialspace=True):
             if line:
                 input_word = line[1]
-                if user_input == input_word:
-                    post_tag = line[-1]
-                    num_tag = give_tag_info(post_tag)
-                    if 0 <= tag_set[num_tag]:
-                        tag_set[num_tag] = tag_set[num_tag] + 1
-    return tag_set
-
-# This function will return tag name given tag number and vice-versa
-# Tags are read from POSTagList.txt
-
-
-def give_tag_info(pos_tag_elem):
-    with open('POSTagList.txt', encoding="utf8") as f:
-        content = f.readlines()
-        tag_num = -1
-        if int == type(pos_tag_elem):
-            tag_num = content[pos_tag_elem]
-        if str == type(pos_tag_elem):
-            for index, elem in enumerate(content):
-                if pos_tag_elem == content[index].strip():
-                    tag_num = index
-                    break
-
-    return tag_num
+                input_word_tag = line[-1]
+                tag_set = {}
+                if input_word not in freq_dict:
+                    freq_dict[input_word] = tag_set
+                    tag_set[input_word_tag] = 1
+                else:
+                    tags_list = freq_dict[input_word]
+                    if input_word_tag in tags_list:
+                        tags_list[input_word_tag] = tags_list[input_word_tag]+1
+                    else:
+                        tags_list[input_word_tag] = 1
+    return freq_dict
 
 
-def get_input_file(filename, separator):
+def print_baseline_output(training, filename, separator):
+    freq = train_freq_counts(training, separator)
     with open("output.txt", "r+", newline='') as output:
         with open(filename, "r") as get_input:
             writer = csv.writer(output, delimiter=separator, skipinitialspace=True)
             for row in csv.reader(get_input, delimiter=separator, skipinitialspace=True):
                 if row:
                     input_word = row[1]
-                    freq = give_freq_counts(r'Training_Berp.txt', '\t', input_word)
-                    max_freq = max(freq)
                     if len(input_word) != 0:
-                        pos_tag_num = freq.index(max_freq)
-                        pos_tag = give_tag_info(pos_tag_num)
-                        writer.writerow(row + [pos_tag.strip()])
+                        if input_word in freq:
+                            tag_dict = freq[input_word]
+                            pos_tag = max(tag_dict, key=lambda key: tag_dict[key])
+                            writer.writerow(row + [pos_tag.strip()])
+                        else:
+                            writer.writerow(row + ['NNP'.strip()])
                     else:
                         writer.writerow('\n'.strip())
                 else:
@@ -56,5 +46,8 @@ def get_input_file(filename, separator):
 
 
 if __name__ == "__main__":
-    output_file = get_input_file(r'NEW_EVAL_TASK.txt', '\t')
+    training_file = r'Training_Berp.txt'
+    devset = r'NEW_EVAL_TASK.txt'
+    delim = '\t'
+    output_file = print_baseline_output(training_file, devset, delim)
     print("success")
