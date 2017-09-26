@@ -16,7 +16,10 @@ def get_addk_tag_bigram_probability(filename, bigram_list, unigram_count):
                         if tag_name_column:
                             tag_bigram_count = freq_dist[tag_name_column.strip()]
                             if unigram_tag_count:
-                                tag_tag_dictionary[tag_name_column.strip()] = (tag_bigram_count+0.001)/(unigram_tag_count+0.046)
+                                if tag_bigram_count:
+                                    tag_tag_dictionary[tag_name_column.strip()] = (tag_bigram_count+0.001)/(unigram_tag_count+0.046)
+                                else:
+                                    tag_tag_dictionary[tag_name_column.strip()] = 0.001 / (unigram_tag_count + 0.046)
                             else:
                                 tag_tag_dictionary[tag_name_column.strip()] = 0
                     tag_dictionary_list[tag_name_row.strip()] = tag_tag_dictionary
