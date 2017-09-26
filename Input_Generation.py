@@ -1,7 +1,7 @@
 
 
 def define_training_unk_words(word_frequency_count, sentence_sequence_word_list):
-    sliced_dictionary = {k: v for k, v in word_frequency_count.items() if v <= 5}
+    sliced_dictionary = {k: v for k, v in word_frequency_count.items() if v <= 1}
     for index, word in enumerate(sentence_sequence_word_list):
         if word:
             if word in sliced_dictionary:
