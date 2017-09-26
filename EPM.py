@@ -18,7 +18,6 @@ def get_epm_bigrams(sequence_1, sequence_2):
 
 def get_tag_bigram_probability(filename_tag, vocabulary, bigram_list, unigram_count):
     word_tag_dictionary_list = {}
-
     with open(filename_tag, encoding="utf8") as file_obj:
         content = file_obj.readlines()
         for tag_name_row in content:
