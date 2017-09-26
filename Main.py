@@ -9,6 +9,7 @@ import Smoothing
 import sys
 import Baseline
 
+
 def fetch_output(training_file,dev_set):
 
     # Defines
@@ -26,22 +27,23 @@ def fetch_output(training_file,dev_set):
 
     tag_frequency_count = CountFrequency.give_freq_counts(training_file, delimiter, tag_column)
     word_frequency_count = CountFrequency.give_freq_counts(training_file, delimiter, word_column)
-    sentence_sequence_word_list = TPM.construct_sentence_sequence(training_file, delimiter, word_column, 0)
-    sentence_sequence_tag_list = TPM.construct_sentence_sequence(training_file, delimiter, tag_column, 0)
-    unked_sequence_word_list = Input_Generation.define_training_unk_words(word_frequency_count, sentence_sequence_word_list)
-    word_tag_pairs = EPM.get_epm_bigrams(sentence_sequence_tag_list, unked_sequence_word_list)
-    tag_tag_pairs = TPM.get_bigrams(sentence_sequence_tag_list)
+    sentence_seq_word_list = TPM.construct_sentence_sequence(training_file, delimiter, word_column, 0)
+    sentence_seq_tag_list = TPM.construct_sentence_sequence(training_file, delimiter, tag_column, 0)
+    unked_sequence_word_list = Input_Generation.define_training_unk_words(word_frequency_count, sentence_seq_word_list)
+    word_tag_pairs = EPM.get_epm_bigrams(sentence_seq_tag_list, unked_sequence_word_list)
+    tag_tag_pairs = TPM.get_bigrams(sentence_seq_tag_list)
     vocabulary = set(unked_sequence_word_list)
 
     # Creating the master parameter list
 
-    master_a = TPM.get_transition_probability_matrix(tags_file, tag_tag_pairs, tag_frequency_count)
+    # master_a = Smoothing.get_backoff_smoothed_tpm(tags_file, tag_tag_pairs, tag_frequency_count)
+    master_a = Smoothing.get_add_k_smoothed_tpm(tags_file, tag_tag_pairs, tag_frequency_count)
+    # master_a = TPM.get_transition_probability_matrix(tags_file, tag_tag_pairs, tag_frequency_count)
     master_b = EPM.get_emission_probability_matrix(tags_file, vocabulary, word_tag_pairs, tag_frequency_count)
-    master_pie_1 = TPM.get_initial_pi_matrix(tags_file, tag_tag_pairs, sentence_sequence_word_list)
+    master_pie_1 = TPM.get_initial_pi_matrix(tags_file, tag_tag_pairs, unked_sequence_word_list)
     master_pie_2 = TPM.get_end_pi_matrix(tags_file, tag_tag_pairs, tag_frequency_count)
 
     # Apply smoothing to Transition probability matrix
-    # master_a = Smoothing.get_add_k_smoothed_tpm(tags_file, tag_tag_pairs, tag_frequency_count)
     # Generating the list of sentences to be fed
 
     all_inputs = TPM.construct_sentence_sequence(dev_set, delimiter, 1, 0)
@@ -94,9 +96,9 @@ def print_output(dev_set, answers, outfile, separator):
 
 if __name__ == "__main__":
 
-    training = sys.argv[1]  # r'Training_Berp.txt'
-    devset = sys.argv[2]  # r'full_test.txt'
-    out_file = sys.argv[3]  # 'output_hmm.txt'
+    training = sys.argv[1]  # r'Training_Berp.txt' #
+    devset = sys.argv[2]  # r'full_test.txt'  #
+    out_file = 'output_hmm.txt'
     delim = '\t'
 
     Baseline.print_baseline_output(training, devset, delim)
